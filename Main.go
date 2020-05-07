@@ -14,10 +14,10 @@ type ufw struct {
 
 type rule struct {
 	XMLName  xml.Name `xml:"rule"`
-	act      string   `xml:"act,attr"`
-	ip       string   `xml:"ip,attr"`
-	port     string   `xml:"port,attr"`
-	protocol string   `xml:"protocol,attr"`
+	Act      string   `xml:"act,attr"`
+	IP       string   `xml:"ip,attr"`
+	Port     string   `xml:"port,attr"`
+	Protocol string   `xml:"protocol,attr"`
 }
 
 var ufwRules ufw
@@ -25,12 +25,7 @@ var ufwRules ufw
 func pluginRun() {
 
 	for _, item := range ufwRules.List {
-		newrule := map[string]string{"act": "allow", "protocol": "any", "port": "any", "ip": "0.0.0.0/0"}
-		for k := range newrule {
-			if len(item.k) != 0 {
-
-			}
-		}
+		fmt.Println(item)
 	}
 
 }
