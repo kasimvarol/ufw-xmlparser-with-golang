@@ -1,0 +1,8 @@
+<ufw>
+	<rule act="allow" port="45"/>
+	<rule act="allow" port="46"/>
+	<rule act="allow" ip="192.168.1.12" protocol="any"/>
+	<rule act="deny" ip="192.168.1.13" protocol="tcp"/>
+	<rule act="allow" ip="192.168.1.14" port="8000" protocol="udp"/>
+	<rule act="reject" ip="192.168.1.15" port="3000" protocol="tcp"/>
+</ufw>
