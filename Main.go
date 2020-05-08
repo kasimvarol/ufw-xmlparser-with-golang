@@ -8,6 +8,9 @@ import (
 	"strings"
 )
 
+const POLICY_FILE = "ufw.xml"
+const USER_FILE = "deneme"
+
 type ufw struct {
 	XMLName xml.Name `xml:"ufw"`
 	List    []rule   `xml:"rule"`
@@ -33,7 +36,7 @@ func pluginRun() {
 		} else if item.Port != "" && strings.Contains(item.Port, ":") && (item.Protocol == "any" || item.Protocol == "") {
 			fmt.Println("ERROR // Multiports require specific protocol!")
 		} else {
-			//After standart check, filling empty variables -if any-  by default.
+			//After standard check, filling empty variables -if any-  by default.
 			if item.IP == "" {
 				item.IP = "0.0.0.0/0"
 			}
@@ -43,7 +46,7 @@ func pluginRun() {
 			if item.Protocol == "" {
 				item.Protocol = "any"
 			}
-			fmt.Println(item)
+
 		}
 
 	}
