@@ -46,7 +46,8 @@ func pluginRun() {
 			if item.Protocol == "" {
 				item.Protocol = "any"
 			}
-
+			newrule := "### tuple ### " + " " + item.Act + " " + item.Protocol + " " + item.Port + " 0.0.0.0/0 any " + item.IP + " in"
+			fmt.Println(newrule)
 		}
 
 	}
