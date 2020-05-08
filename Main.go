@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 type ufw struct {
@@ -23,9 +24,28 @@ type rule struct {
 var ufwRules ufw
 
 func pluginRun() {
-
 	for _, item := range ufwRules.List {
-		fmt.Println(item)
+		// Checking standards
+		if item.Act == "" {
+			fmt.Println("ERROR // One of rules action field is missing!")
+		} else if item.IP == "" && item.Port == "" {
+			fmt.Println("ERROR // Either Port or IP should be specified!")
+		} else if item.Port != "" && strings.Contains(item.Port, ":") && (item.Protocol == "any" || item.Protocol == "") {
+			fmt.Println("ERROR // Multiports require specific protocol!")
+		} else {
+			//After standart check, filling empty variables -if any-  by default.
+			if item.IP == "" {
+				item.IP = "0.0.0.0/0"
+			}
+			if item.Port == "" {
+				item.Port = "any"
+			}
+			if item.Protocol == "" {
+				item.Protocol = "any"
+			}
+			fmt.Println(item)
+		}
+
 	}
 
 }
