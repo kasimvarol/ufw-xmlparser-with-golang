@@ -63,7 +63,7 @@ func pluginRun() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fo, err := os.Open(USER_FILE)
+		fo, err := os.OpenFile("anotherfile", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -76,11 +76,11 @@ func pluginRun() {
 			line := scanner.Text()
 			if line == "### RULES ###" {
 				line = line + "\n" + rule
-				writer.WriteString(line + "\n")
 			}
-
+			writer.WriteString(line + "\n")
 		}
 		writer.Flush()
+
 	}
 
 }
