@@ -59,11 +59,11 @@ func pluginRun() {
 	// WRITING RULES
 	for _, rule := range rules {
 
-		fi, err := os.Open(USER_FILE)
+		fi, err := os.Open("test.txt")
 		if err != nil {
 			log.Fatal(err)
 		}
-		fo, err := os.OpenFile("anotherfile", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		fo, err := os.OpenFile("test.txt", os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
