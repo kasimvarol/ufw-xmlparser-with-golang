@@ -1,15 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 )
 
 const POLICY_FILE = "ufw.xml"
-const USER_FILE = "deneme"
+const USER_FILE = "/home/mkv/code/src/github.com/kasimvarol/xmlparse/deneme"
 
 type ufw struct {
 	XMLName xml.Name `xml:"ufw"`
@@ -27,6 +29,7 @@ type rule struct {
 var ufwRules ufw
 
 func pluginRun() {
+
 	for _, item := range ufwRules.List {
 		// Checking standards
 		if item.Act == "" {
@@ -46,10 +49,27 @@ func pluginRun() {
 			if item.Protocol == "" {
 				item.Protocol = "any"
 			}
-			newrule := "### tuple ### " + " " + item.Act + " " + item.Protocol + " " + item.Port + " 0.0.0.0/0 any " + item.IP + " in"
-			fmt.Println(newrule)
+			//newrule := "### tuple ### " + " " + item.Act + " " + item.Protocol + " " + item.Port + " 0.0.0.0/0 any " + item.IP + " in"
+			//fmt.Println(newrule)
+
 		}
 
+	}
+	// WRITING RULES
+	file, err := os.Open(USER_FILE)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		if scanner.Text() == "### RULES ###" {
+			fmt.Println(scanner.Text())
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 
 }
