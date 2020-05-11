@@ -11,7 +11,7 @@ import (
 )
 
 const POLICY_FILE = "ufw.xml"
-const USER_FILE = "/home/mkv/code/src/github.com/kasimvarol/xmlparse/deneme"
+const USER_FILE = "deneme"
 
 type ufw struct {
 	XMLName xml.Name `xml:"ufw"`
@@ -59,11 +59,11 @@ func pluginRun() {
 	// WRITING RULES
 	for _, rule := range rules {
 
-		fi, err := os.Open("test.txt")
+		fi, err := os.Open(USER_FILE)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fo, err := os.OpenFile("test.txt", os.O_CREATE|os.O_WRONLY, 0644)
+		fo, err := os.OpenFile(USER_FILE, os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
