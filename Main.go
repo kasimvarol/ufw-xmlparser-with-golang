@@ -27,10 +27,11 @@ type rule struct {
 }
 
 var ufwRules ufw
+var rules []string
 
 func pluginRun() {
-
 	for _, item := range ufwRules.List {
+		var newrule string
 		// Checking standards
 		if item.Act == "" {
 			fmt.Println("ERROR // One of rules action field is missing!")
@@ -49,27 +50,37 @@ func pluginRun() {
 			if item.Protocol == "" {
 				item.Protocol = "any"
 			}
-			//newrule := "### tuple ### " + " " + item.Act + " " + item.Protocol + " " + item.Port + " 0.0.0.0/0 any " + item.IP + " in"
-			//fmt.Println(newrule)
-
+			newrule = "### tuple ### " + " " + item.Act + " " + item.Protocol + " " + item.Port + " 0.0.0.0/0 any " + item.IP + " in"
+			rules = append(rules, newrule)
 		}
 
 	}
+
 	// WRITING RULES
-	file, err := os.Open(USER_FILE)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		if scanner.Text() == "### RULES ###" {
-			fmt.Println(scanner.Text())
-		}
-	}
+	for _, rule := range rules {
 
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		fi, err := os.Open(USER_FILE)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fo, err := os.Open(USER_FILE)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer fi.Close()
+		defer fo.Close()
+		scanner := bufio.NewScanner(fi)
+		writer := bufio.NewWriter(fo)
+
+		for scanner.Scan() {
+			line := scanner.Text()
+			if line == "### RULES ###" {
+				line = line + "\n" + rule
+				writer.WriteString(line + "\n")
+			}
+
+		}
+		writer.Flush()
 	}
 
 }

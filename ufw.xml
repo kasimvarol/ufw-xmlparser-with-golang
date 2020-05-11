@@ -1,7 +1,4 @@
 <ufw>
-	<rule port="45"/>
-	<rule act="allow" port="45:50"/>
-	<rule act="allow"/>
 	<rule act="allow" port="45:50" protocol="tcp"/>
 	<rule act="allow" ip="192.168.1.12" protocol="any"/>
 	<rule act="deny" ip="192.168.1.13" protocol="tcp"/>

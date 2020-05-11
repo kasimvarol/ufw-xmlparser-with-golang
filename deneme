@@ -17,35 +17,6 @@
 :ufw-user-limit-accept - [0:0]
 ### RULES ###
 
-### tuple ### reject tcp 3000 0.0.0.0/0 any 192.168.1.15 in
-
-### tuple ### allow udp 8000 0.0.0.0/0 any 192.168.1.14 in
-
-### tuple ### deny tcp any 0.0.0.0/0 any 192.168.1.13 in
-
-### tuple ### allow any any 0.0.0.0/0 any 192.168.1.12 in
-
-### tuple ### reject tcp 3000 0.0.0.0/0 any 192.168.1.15 in
-
-### tuple ### allow udp 8000 0.0.0.0/0 any 192.168.1.14 in
-
-### tuple ### deny tcp any 0.0.0.0/0 any 192.168.1.13 in
-
-### tuple ### allow any any 0.0.0.0/0 any 192.168.1.12 in
-
-### tuple ### reject tcp 3000 0.0.0.0/0 any 192.168.1.15 in
-
-### tuple ### allow udp 8000 0.0.0.0/0 any 192.168.1.14 in
-
-### tuple ### deny tcp any 0.0.0.0/0 any 192.168.1.13 in
-
-### tuple ### allow any any 0.0.0.0/0 any 192.168.1.12 in
-
-### tuple ### allow any 45 0.0.0.0/0 any 0.0.0.0/0 in
-
-### tuple ### allow any 45 0.0.0.0/0 any 0.0.0.0/0 in
-
-### tuple ### allow any 45 0.0.0.0/0 any 0.0.0.0/0 in
 ### END RULES ###
 
 ### LOGGING ###
