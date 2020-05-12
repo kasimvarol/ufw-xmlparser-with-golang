@@ -1,3 +1,8 @@
+/**
+ * For XML File: Act and (Port or IP) attribute is necessary. Other 2 attributes can be added according to specialization.
+ * Empty attributes is set by default.
+ * If a rule has IP attribute, it has prior hierarchy.
+ */
 package main
 
 import (
@@ -69,6 +74,7 @@ func pluginRun() {
 			if item.Protocol == "" {
 				item.Protocol = "any"
 			}
+
 			newrule = "### tuple ### " + " " + item.Act + " " + item.Protocol + " " + item.Port + " 0.0.0.0/0 any " + item.IP + " in"
 			rules = append(rules, newrule)
 		}
@@ -95,8 +101,16 @@ func pluginRun() {
 		// Reading USER_FILE to decide which line to append/insert
 		for scanner.Scan() {
 			line := scanner.Text()
-			if line == "### RULES ###" {
-				line = line + "\n" + rule
+			//if rule has specific ip attribute append it after RULES line (top of rules list)
+			if !strings.Contains(rule, "0.0.0.0/0 in") {
+				if line == "### RULES ###" {
+					line = line + "\n" + rule
+				}
+			} else {
+				//if not, insert before end of RULES line.
+				if scanner.Text() == "### END RULES ###" {
+					line = rule + "\n" + line
+				}
 			}
 			writer.WriteString(line + "\n")
 		}

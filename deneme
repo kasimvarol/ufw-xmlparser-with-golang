@@ -16,7 +16,6 @@
 :ufw-user-limit - [0:0]
 :ufw-user-limit-accept - [0:0]
 ### RULES ###
-
 ### END RULES ###
 
 ### LOGGING ###
