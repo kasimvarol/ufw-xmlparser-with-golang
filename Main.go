@@ -10,9 +10,7 @@ import (
 	"strings"
 )
 
-const POLICY_FILE = "ufw.xml"
-const USER_FILE = "deneme"
-
+//XML Parse Structure: <ufw> <rule ../> <rule ../> ... </ufw>
 type ufw struct {
 	XMLName xml.Name `xml:"ufw"`
 	List    []rule   `xml:"rule"`
@@ -26,12 +24,32 @@ type rule struct {
 	Protocol string   `xml:"protocol,attr"`
 }
 
+// Constants and global variables
+const POLICY_FILE = "ufw.xml"
+const USER_FILE = "deneme"
+
 var ufwRules ufw
 var rules []string
 
 func pluginRun() {
+
+	//Parsing XML file into global ufw variable
+	xmlFile, err := os.Open(POLICY_FILE)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	defer xmlFile.Close()
+	byteValue, _ := ioutil.ReadAll(xmlFile)
+
+	xml.Unmarshal(byteValue, &ufwRules)
+
+	//Creating rules as string and append to string slice
 	for _, item := range ufwRules.List {
 		var newrule string
+
 		// Checking standards
 		if item.Act == "" {
 			fmt.Println("ERROR // One of rules action field is missing!")
@@ -40,6 +58,7 @@ func pluginRun() {
 		} else if item.Port != "" && strings.Contains(item.Port, ":") && (item.Protocol == "any" || item.Protocol == "") {
 			fmt.Println("ERROR // Multiports require specific protocol!")
 		} else {
+
 			//After standard check, filling empty variables -if any-  by default.
 			if item.IP == "" {
 				item.IP = "0.0.0.0/0"
@@ -56,7 +75,7 @@ func pluginRun() {
 
 	}
 
-	// WRITING RULES
+	// For each rule read USER_FILE and write according to hierarchy.
 	for _, rule := range rules {
 
 		fi, err := os.Open(USER_FILE)
@@ -69,9 +88,11 @@ func pluginRun() {
 		}
 		defer fi.Close()
 		defer fo.Close()
+
 		scanner := bufio.NewScanner(fi)
 		writer := bufio.NewWriter(fo)
 
+		// Reading USER_FILE to decide which line to append/insert
 		for scanner.Scan() {
 			line := scanner.Text()
 			if line == "### RULES ###" {
@@ -86,18 +107,5 @@ func pluginRun() {
 }
 
 func main() {
-
-	xmlFile, err := os.Open("/home/mkv/code/src/github.com/kasimvarol/xmlparse/ufw.xml")
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	defer xmlFile.Close()
-	byteValue, _ := ioutil.ReadAll(xmlFile)
-
-	xml.Unmarshal(byteValue, &ufwRules)
-
 	pluginRun()
 }
