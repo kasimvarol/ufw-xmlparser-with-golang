@@ -1,6 +1,6 @@
 /**
  * For XML File: Act and (Port or IP) attribute is necessary. Other 2 attributes can be added according to specialization.
- * Empty attributes is set by default.
+ * Empty attributes are set by default.
  * If a rule has IP attribute, it has prior hierarchy.
  */
 package main
@@ -31,13 +31,12 @@ type rule struct {
 
 // Constants and global variables
 const POLICY_FILE = "ufw.xml"
-const USER_FILE = "deneme"
+const USER_FILE = "/etc/ufw/user.rules"
 
 var ufwRules ufw
 var rules []string
 
-func pluginRun() {
-
+func parseXML() {
 	//Parsing XML file into global ufw variable
 	xmlFile, err := os.Open(POLICY_FILE)
 
@@ -50,7 +49,9 @@ func pluginRun() {
 	byteValue, _ := ioutil.ReadAll(xmlFile)
 
 	xml.Unmarshal(byteValue, &ufwRules)
+}
 
+func pluginRun() {
 	//Creating rules as string and append to string slice
 	for _, item := range ufwRules.List {
 		var newrule string
@@ -121,5 +122,6 @@ func pluginRun() {
 }
 
 func main() {
+	parseXML()
 	pluginRun()
 }
